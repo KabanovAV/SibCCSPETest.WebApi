@@ -16,7 +16,6 @@ namespace SibCCSPETest.WebApi.Controllers
         public async Task<ActionResult<IEnumerable<SpecializationDTO>>> GetAll()
         {
             var specializations = await _service.SpecializationRepository.GetAllSpecializationAsync();
-            specializations.Any();
             var specializationDTOs = _mapper.Map<IEnumerable<SpecializationDTO>>(specializations);
             return Ok(specializationDTOs);
         }
