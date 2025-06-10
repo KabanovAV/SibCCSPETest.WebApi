@@ -1,0 +1,6 @@
+@SibCCSPETest.WebApi_HostAddress = http://localhost:5288
+
+GET {{SibCCSPETest.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

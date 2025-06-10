@@ -1,0 +1,57 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using SibCCSPETest.Data;
+using SibCCSPETest.ServiceBase;
+
+namespace SibCCSPETest.WebApi.Controllers
+{
+    [Route("api/[controller]/[action]")]
+    [ApiController]
+    public class TopicController(IRepoServiceManager service) : ControllerBase
+    {
+        private readonly IRepoServiceManager _service = service;
+
+        [HttpGet]
+        public ActionResult<IEnumerable<Topic>> GetAll()
+        {
+            var topics = _service.TopicRepository.GetAllTopic();
+            return Ok(topics);
+        }
+
+        [HttpGet]
+        public ActionResult<Topic> Get([FromQuery] int id)
+        {
+            var topic = _service.TopicRepository.GetTopic(t => t.Id == id);
+            if (topic == null)
+                return NotFound(new { Message = $"Тема с id {id} не найдена." });
+            return Ok(topic);
+        }
+
+        [HttpPost]
+        public ActionResult<Topic> Add([FromBody] Topic topic)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            _service.TopicRepository.AddTopic(topic);
+            return CreatedAtAction(nameof(Get), new { id = topic.Id }, topic);
+        }
+
+        [HttpPut]
+        public IActionResult Update([FromBody] Topic topic)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            _service.TopicRepository.UpdateTopic(topic);
+            return NoContent();
+        }
+
+        [HttpDelete]
+        public IActionResult Delete([FromQuery] int id)
+        {
+            var topic = _service.TopicRepository.GetTopic(t => t.Id == id);
+            if (topic == null)
+                return NotFound(new { Message = $"Тема с id {id} не найдена." });
+            _service.TopicRepository.DeleteTopic(topic);
+            return NoContent();
+        }
+    }
+}
