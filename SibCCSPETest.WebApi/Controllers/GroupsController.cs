@@ -21,12 +21,12 @@ namespace SibCCSPETest.WebApi.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Group>> Get(int id)
+        public async Task<ActionResult<GroupDTO>> Get(int id)
         {
             var group = await _service.GroupRepository.GetGroupAsync(g => g.Id == id);
             if (group == null)
                 return NotFound(new { Message = $"Группа с id {id} не найдена." });
-            var groupDTO = _mapper.Map<Group>(group);
+            var groupDTO = _mapper.Map<GroupDTO>(group);
             return Ok(groupDTO);
         }
 
