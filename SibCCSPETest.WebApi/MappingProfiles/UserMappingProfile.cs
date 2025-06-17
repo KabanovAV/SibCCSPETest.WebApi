@@ -7,7 +7,8 @@ namespace SibCCSPETest.WebApi.MappingProfiles
     {
         public UserMappingProfile()
         {
-            CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<User, UserDTO>().ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.LastName} {src.FirstName} {src.Surname}"))
+                .ReverseMap();
             CreateMap<UserCreateDTO, User>();
         }
     }
