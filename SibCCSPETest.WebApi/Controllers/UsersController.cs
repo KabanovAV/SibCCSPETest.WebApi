@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using SibCCSPETest.Data;
 using SibCCSPETest.ServiceBase;
 
@@ -6,46 +7,51 @@ namespace SibCCSPETest.WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class UsersController(IRepoServiceManager service) : ControllerBase
+    public class UsersController(IRepoServiceManager service, IMapper mapper) : ControllerBase
     {
         private readonly IRepoServiceManager _service = service;
+        private readonly IMapper _mapper = mapper;
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetAll()
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetAll()
         {
             var users = await _service.UserRepository.GetAllUserAsync();
-            return Ok(users);
+            var userDTOs = _mapper.Map<IEnumerable<UserDTO>>(users);
+            return Ok(userDTOs);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<User>> Get([FromQuery] int id)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<UserDTO>> Get(int id)
         {
             var user = await _service.UserRepository.GetUserAsync(u => u.Id == id);
             if (user == null)
                 return NotFound(new { Message = $"Пользователь с id {id} не найден." });
-            return Ok(user);
+            var userDTO = _mapper.Map<UserDTO>(user);
+            return Ok(userDTO);
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> Add([FromBody] User user)
+        public async Task<ActionResult<UserDTO>> Add([FromBody] UserCreateDTO userCreateDTO)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            var user = _mapper.Map<User>(userCreateDTO);
             await _service.UserRepository.AddUserAsync(user);
             return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody] User user)
+        public IActionResult Update([FromBody] UserDTO userDTO)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            var user = _mapper.Map<User>(userDTO);
             _service.UserRepository.UpdateUser(user);
             return NoContent();
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromQuery] int id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
         {
             var user = await _service.UserRepository.GetUserAsync(u => u.Id == id);
             if (user == null)
