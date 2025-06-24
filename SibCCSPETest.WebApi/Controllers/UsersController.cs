@@ -5,7 +5,7 @@ using SibCCSPETest.ServiceBase;
 
 namespace SibCCSPETest.WebApi.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class UsersController(IRepoServiceManager service, IMapper mapper) : ControllerBase
     {

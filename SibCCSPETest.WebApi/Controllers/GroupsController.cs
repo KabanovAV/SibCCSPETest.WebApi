@@ -5,7 +5,7 @@ using SibCCSPETest.ServiceBase;
 
 namespace SibCCSPETest.WebApi.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class GroupsController(IRepoServiceManager service, IMapper mapper) : ControllerBase
     {
@@ -15,7 +15,7 @@ namespace SibCCSPETest.WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GroupDTO>>> GetAll()
         {
-            var groups = await _service.GroupRepository.GetAllGroupAsync();
+            var groups = await _service.GroupRepository.GetAllGroupAsync(includeProperties: "Specialization");
             var groupDTOs = _mapper.Map<IEnumerable<GroupDTO>>(groups);
             return Ok(groupDTOs);
         }

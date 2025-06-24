@@ -7,7 +7,8 @@ namespace SibCCSPETest.WebApi.MappingProfiles
     {
         public TopicMappingProfile()
         {
-            CreateMap<Topic, TopicDTO>().ReverseMap();
+            CreateMap<Topic, TopicDTO>().ForMember(dest => dest.SpecializationTitle, opt => opt.MapFrom(src => src.Specialization.Title))
+                .ReverseMap();
             CreateMap<TopicCreateDTO, Topic>();
         }
     }

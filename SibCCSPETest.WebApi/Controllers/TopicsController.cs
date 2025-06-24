@@ -5,7 +5,7 @@ using SibCCSPETest.ServiceBase;
 
 namespace SibCCSPETest.WebApi.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class TopicsController(IRepoServiceManager service, IMapper mapper) : ControllerBase
     {
@@ -15,7 +15,7 @@ namespace SibCCSPETest.WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TopicDTO>>> GetAll()
         {
-            var topics = await _service.TopicRepository.GetAllTopicAsync();
+            var topics = await _service.TopicRepository.GetAllTopicAsync(includeProperties: "Specialization");
             var topicDTOs = _mapper.Map<IEnumerable<TopicDTO>>(topics);
             return Ok(topicDTOs);
         }
