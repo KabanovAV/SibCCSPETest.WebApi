@@ -31,23 +31,28 @@ namespace SibCCSPETest.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserDTO>> Add([FromBody] UserCreateDTO userCreateDTO)
+        public async Task<ActionResult<UserDTO>> Add(UserCreateDTO userCreateDTO)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (userCreateDTO == null)
+                return BadRequest("Данные для добавления пользователя пустые.");
             var user = _mapper.Map<User>(userCreateDTO);
             await _service.UserRepository.AddUserAsync(user);
-            return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
+            var userDTO = _mapper.Map<UserDTO>(user);
+            return CreatedAtAction(nameof(Get), new { id = userDTO.Id }, userDTO);
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody] UserDTO userDTO)
+        public async Task<ActionResult<GroupDTO>> Update(UserDTO userDTO)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            var user = _mapper.Map<User>(userDTO);
-            _service.UserRepository.UpdateUser(user);
-            return NoContent();
+            if (userDTO == null)
+                return BadRequest("Данные для обновления пользователя пустые.");
+            var user = await _service.UserRepository.GetUserAsync(u => u.Id == userDTO.Id);
+            if (user == null)
+                return NotFound(new { Message = $"Пользователь с id {userDTO.Id} не найден." });
+            _mapper.Map(userDTO, user);
+            await _service.UserRepository.UpdateUser(user);
+            userDTO = _mapper.Map<UserDTO>(user);
+            return Ok(userDTO);
         }
 
         [HttpDelete("{id:int}")]

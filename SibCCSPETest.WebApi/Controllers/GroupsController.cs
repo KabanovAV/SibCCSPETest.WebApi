@@ -23,7 +23,7 @@ namespace SibCCSPETest.WebApi.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<GroupDTO>> Get(int id)
         {
-            var group = await _service.GroupRepository.GetGroupAsync(g => g.Id == id);
+            var group = await _service.GroupRepository.GetGroupAsync(g => g.Id == id, "Specialization");
             if (group == null)
                 return NotFound(new { Message = $"Группа с id {id} не найдена." });
             var groupDTO = _mapper.Map<GroupDTO>(group);
@@ -31,23 +31,28 @@ namespace SibCCSPETest.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<GroupDTO>> Add([FromBody] GroupCreateDTO groupCreateDTO)
+        public async Task<ActionResult<GroupDTO>> Add(GroupCreateDTO groupCreateDTO)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (groupCreateDTO == null)
+                return BadRequest("Данные для добавления группы пустые.");
             var group = _mapper.Map<Group>(groupCreateDTO);
-            await _service.GroupRepository.AddGroupAsync(group);
-            return CreatedAtAction(nameof(Get), new { id = group.Id }, group);
+            await _service.GroupRepository.AddGroupAsync(group, "Specialization");
+            var groupDTO = _mapper.Map<GroupDTO>(group);
+            return CreatedAtAction(nameof(Get), new { id = groupDTO.Id }, groupDTO);
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody] GroupDTO groupDTO)
+        public async Task<ActionResult<GroupDTO>> Update(GroupDTO groupDTO)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            var group = _mapper.Map<Group>(groupDTO);
-            _service.GroupRepository.UpdateGroup(group);
-            return NoContent();
+            if (groupDTO == null)
+                return BadRequest("Данные для обновления группы пустые.");
+            var group = await _service.GroupRepository.GetGroupAsync(g => g.Id == groupDTO.Id, "Specialization");
+            if (group == null)
+                return NotFound(new { Message = $"Группа с id {groupDTO.Id} не найдена." });
+            _mapper.Map(groupDTO, group);
+            await _service.GroupRepository.UpdateGroup(group, "Specialization");
+            groupDTO = _mapper.Map<GroupDTO>(group);
+            return Ok(groupDTO);
         }
 
         [HttpDelete("{id:int}")]

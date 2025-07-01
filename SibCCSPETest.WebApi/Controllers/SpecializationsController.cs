@@ -31,23 +31,28 @@ namespace SibCCSPETest.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<SpecializationDTO>> Add([FromBody] SpecializationCreateDTO specializationCreateDTO)
+        public async Task<ActionResult<SpecializationDTO>> Add(SpecializationCreateDTO specializationCreateDTO)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (specializationCreateDTO == null)
+                return BadRequest("Данные для добавления специализации пустые.");
             var specialization = _mapper.Map<Specialization>(specializationCreateDTO);
             await _service.SpecializationRepository.AddSpecializationAsync(specialization);
-            return CreatedAtAction(nameof(Get), new { id = specialization.Id }, specialization);
+            var specializationDTO = _mapper.Map<SpecializationDTO>(specialization);
+            return CreatedAtAction(nameof(Get), new { id = specializationDTO.Id }, specializationDTO);
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody] SpecializationDTO specializationDTO)
+        public async Task<ActionResult<SpecializationDTO>> Update(SpecializationDTO specializationDTO)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            var specialization = _mapper.Map<Specialization>(specializationDTO);
-            _service.SpecializationRepository.UpdateSpecialization(specialization);
-            return NoContent();
+            if (specializationDTO == null)
+                return BadRequest("Данные для обновления специализации пустые.");
+            var specialization = await _service.SpecializationRepository.GetSpecializationAsync(s => s.Id == specializationDTO.Id);
+            if (specialization == null)
+                return NotFound(new { Message = $"Специализация с id {specializationDTO.Id} не найдена." });
+            _mapper.Map(specializationDTO, specialization);
+            await _service.SpecializationRepository.UpdateSpecialization(specialization);
+            specializationDTO = _mapper.Map<SpecializationDTO>(specialization);
+            return Ok(specializationDTO);
         }
 
         [HttpDelete("{id:int}")]

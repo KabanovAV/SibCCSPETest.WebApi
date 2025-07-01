@@ -23,7 +23,7 @@ namespace SibCCSPETest.WebApi.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<TopicDTO>> Get(int id)
         {
-            var topic = await _service.TopicRepository.GetTopicAsync(t => t.Id == id);
+            var topic = await _service.TopicRepository.GetTopicAsync(t => t.Id == id, "Specialization");
             if (topic == null)
                 return NotFound(new { Message = $"Тема с id {id} не найдена." });
             var topicDTO = _mapper.Map<TopicDTO>(topic);
@@ -31,23 +31,28 @@ namespace SibCCSPETest.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<TopicDTO>> Add([FromBody] TopicCreateDTO topicCreateDTO)
+        public async Task<ActionResult<TopicDTO>> Add(TopicCreateDTO topicCreateDTO)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (topicCreateDTO == null)
+                return BadRequest("Данные для добавления темы пустые.");
             var topic = _mapper.Map<Topic>(topicCreateDTO);
-            await _service.TopicRepository.AddTopicAsync(topic);
-            return CreatedAtAction(nameof(Get), new { id = topic.Id }, topic);
+            await _service.TopicRepository.AddTopicAsync(topic, "Specialization");
+            var topicDTO = _mapper.Map<TopicDTO>(topic);
+            return CreatedAtAction(nameof(Get), new { id = topicDTO.Id }, topicDTO);
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody] TopicDTO topicDTO)
+        public async Task<ActionResult<GroupDTO>> Update(TopicDTO topicDTO)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            var topic = _mapper.Map<Topic>(topicDTO);
-            _service.TopicRepository.UpdateTopic(topic);
-            return NoContent();
+            if (topicDTO == null)
+                return BadRequest("Данные для обновления темы пустые.");
+            var topic = await _service.TopicRepository.GetTopicAsync(t => t.Id == topicDTO.Id, "Specialization");
+            if (topic == null)
+                return NotFound(new { Message = $"Тема с id {topicDTO.Id} не найдена." });
+            _mapper.Map(topicDTO, topic);
+            await _service.TopicRepository.UpdateTopic(topic, "Specialization");
+            topicDTO = _mapper.Map<TopicDTO>(topic);
+            return Ok(topicDTO);
         }
 
         [HttpDelete("{id:int}")]

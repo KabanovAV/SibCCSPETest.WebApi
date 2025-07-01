@@ -7,8 +7,11 @@ namespace SibCCSPETest.WebApi.MappingProfiles
     {
         public GroupMappingProfile()
         {
-            CreateMap<Group, GroupDTO>().ForMember(dest => dest.SpecializationTitle, opt => opt.MapFrom(src => src.Specialization.Title))
-                .ReverseMap();
+            CreateMap<Group, GroupDTO>().ForMember(dest => dest.SpecializationTitle, opt =>
+            {
+                opt.PreCondition(src => src.Specialization != null);
+                opt.MapFrom(src => src.Specialization!.Title);
+            }).ReverseMap();
             CreateMap<GroupCreateDTO, Group>();
         }
     }

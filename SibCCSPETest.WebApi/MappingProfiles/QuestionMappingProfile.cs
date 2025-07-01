@@ -7,8 +7,10 @@ namespace SibCCSPETest.WebApi.MappingProfiles
     {
         public QuestionMappingProfile()
         {
-            CreateMap<Question, QuestionDTO>().ReverseMap();
-            CreateMap<QuestionCreateDTO, Question>();
+            CreateMap<Question, QuestionDTO>().ForMember(dest => dest.AnswerItems, opt => opt.MapFrom(src => src.Answers))
+                .ReverseMap();
+            CreateMap<QuestionCreateDTO, Question>()
+                .ForMember(dest => dest.Answers, opt => opt.MapFrom(src => src.AnswerItems));
         }
     }
 }

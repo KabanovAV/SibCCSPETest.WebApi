@@ -15,7 +15,7 @@ namespace SibCCSPETest.WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<QuestionDTO>>> GetAll()
         {
-            var questions = await _service.QuestionRepository.GetAllQuestionAsync();
+            var questions = await _service.QuestionRepository.GetAllQuestionAsync(includeProperties: "Answers");
             var questionDTOs = _mapper.Map<IEnumerable<QuestionDTO>>(questions);
             return Ok(questionDTOs);
         }
@@ -23,7 +23,7 @@ namespace SibCCSPETest.WebApi.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<QuestionDTO>> Get(int id)
         {
-            var question = await _service.QuestionRepository.GetQuestionAsync(q => q.Id == id);
+            var question = await _service.QuestionRepository.GetQuestionAsync(q => q.Id == id, "Answers");
             if (question == null)
                 return NotFound(new { Message = $"Вопрос с id {id} не найден." });
             var questionDTO = _mapper.Map<QuestionDTO>(question);
@@ -31,23 +31,28 @@ namespace SibCCSPETest.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<QuestionDTO>> Add([FromBody] QuestionCreateDTO questionCreateDTO)
+        public async Task<ActionResult<QuestionDTO>> Add(QuestionCreateDTO questionCreateDTO)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            if (questionCreateDTO == null)
+                return BadRequest("Данные для добавления вопроса пустые.");
             var question = _mapper.Map<Question>(questionCreateDTO);
-            await _service.QuestionRepository.AddQuestionAsync(question);
-            return CreatedAtAction(nameof(Get), new { id = question.Id }, question);
+            await _service.QuestionRepository.AddQuestionAsync(question, "Answers");
+            var questionDTO = _mapper.Map<QuestionDTO>(question);
+            return CreatedAtAction(nameof(Get), new { id = questionDTO.Id }, questionDTO);
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody] QuestionDTO questionDTO)
+        public async Task<ActionResult<GroupDTO>> Update(QuestionDTO questionDTO)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            var question = _mapper.Map<Question>(questionDTO);
-            _service.QuestionRepository.UpdateQuestion(question);
-            return NoContent();
+            if (questionDTO == null)
+                return BadRequest("Данные для обновления вопроса пустые.");
+            var question = await _service.QuestionRepository.GetQuestionAsync(q => q.Id == questionDTO.Id, "Answers");
+            if (question == null)
+                return NotFound(new { Message = $"Вопрос с id {questionDTO.Id} не найден." });
+            _mapper.Map(questionDTO, question);
+            await _service.QuestionRepository.UpdateQuestion(question, "Answers");
+            questionDTO = _mapper.Map<QuestionDTO>(question);
+            return Ok(questionDTO);
         }
 
         [HttpDelete("{id:int}")]

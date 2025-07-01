@@ -13,7 +13,11 @@ namespace SibCCSPETest.WebApi.MappingProfiles
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => GetNamePart(src.FullName, 0)))
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => GetNamePart(src.FullName, 1)))
                 .ForMember(dest => dest.Surname, opt => opt.MapFrom(src => GetNamePart(src.FullName, 2)));
-            CreateMap<UserCreateDTO, User>();
+
+            CreateMap<UserCreateDTO, User>()
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => GetNamePart(src.FullName, 0)))
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => GetNamePart(src.FullName, 1)))
+                .ForMember(dest => dest.Surname, opt => opt.MapFrom(src => GetNamePart(src.FullName, 2)));
         }
 
         private static string GetNamePart(string fullName, int index)

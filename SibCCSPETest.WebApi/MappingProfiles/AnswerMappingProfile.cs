@@ -7,7 +7,11 @@ namespace SibCCSPETest.WebApi.MappingProfiles
     {
         public AnswerMappingProfile()
         {
-            CreateMap<Answer, AnswerDTO>().ReverseMap();
+            CreateMap<Answer, AnswerDTO>().ForMember(dest => dest.QuestionTitle, opt =>
+            {
+                opt.PreCondition(src => src.Question != null);
+                opt.MapFrom(src => src.Question!.Title);
+            }).ReverseMap();
             CreateMap<AnswerCreateDTO, Answer>();
         }
     }
