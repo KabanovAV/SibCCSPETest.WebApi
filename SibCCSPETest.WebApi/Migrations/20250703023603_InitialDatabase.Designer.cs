@@ -12,8 +12,8 @@ using SibCCSPETest.Data;
 namespace SibCCSPETest.WebApi.Migrations
 {
     [DbContext(typeof(DbDataContext))]
-    [Migration("20250428060356_DatabaseCreation")]
-    partial class DatabaseCreation
+    [Migration("20250703023603_InitialDatabase")]
+    partial class InitialDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace SibCCSPETest.WebApi.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("SibCCSPETest.Answer", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.Answer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,8 +33,11 @@ namespace SibCCSPETest.WebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("boolean");
@@ -53,7 +56,7 @@ namespace SibCCSPETest.WebApi.Migrations
                     b.ToTable("Answers");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.Group", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.Group", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -62,20 +65,24 @@ namespace SibCCSPETest.WebApi.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Begin")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("End")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("SpecializationId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.HasKey("Id");
 
@@ -84,7 +91,7 @@ namespace SibCCSPETest.WebApi.Migrations
                     b.ToTable("Groups");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.GroupUser", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.GroupUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -92,17 +99,20 @@ namespace SibCCSPETest.WebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime?>("EndTest")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("EndTest")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("GroupId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("StartTest")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("StartTest")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
@@ -119,7 +129,7 @@ namespace SibCCSPETest.WebApi.Migrations
                     b.ToTable("GroupUsers");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.Question", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.Question", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -127,8 +137,11 @@ namespace SibCCSPETest.WebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -139,7 +152,7 @@ namespace SibCCSPETest.WebApi.Migrations
                     b.ToTable("Questions");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.Result", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.Result", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -150,8 +163,11 @@ namespace SibCCSPETest.WebApi.Migrations
                     b.Property<int?>("AnswerId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("GroupUserId")
                         .HasColumnType("integer");
@@ -168,7 +184,7 @@ namespace SibCCSPETest.WebApi.Migrations
                     b.ToTable("Results");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.Setting", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.Setting", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -176,16 +192,19 @@ namespace SibCCSPETest.WebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<int>("CountOfQuestion")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("GroupId")
                         .HasColumnType("integer");
 
-                    b.Property<TimeSpan?>("Timer")
+                    b.Property<TimeSpan>("Timer")
                         .HasColumnType("interval");
 
                     b.HasKey("Id");
@@ -196,7 +215,7 @@ namespace SibCCSPETest.WebApi.Migrations
                     b.ToTable("Settings");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.Specialization", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.Specialization", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -204,19 +223,23 @@ namespace SibCCSPETest.WebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Specializations");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.Topic", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.Topic", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -224,15 +247,19 @@ namespace SibCCSPETest.WebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("SpecializationId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -241,7 +268,7 @@ namespace SibCCSPETest.WebApi.Migrations
                     b.ToTable("Topics");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.TopicQuestion", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.TopicQuestion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -249,8 +276,11 @@ namespace SibCCSPETest.WebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("QuestionId")
                         .HasColumnType("integer");
@@ -267,7 +297,7 @@ namespace SibCCSPETest.WebApi.Migrations
                     b.ToTable("TopicQuestions");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.User", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -275,16 +305,21 @@ namespace SibCCSPETest.WebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
 
                     b.Property<string>("Login")
                         .IsRequired()
@@ -301,7 +336,6 @@ namespace SibCCSPETest.WebApi.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Surname")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -309,9 +343,9 @@ namespace SibCCSPETest.WebApi.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.Answer", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.Answer", b =>
                 {
-                    b.HasOne("SibCCSPETest.Question", "Question")
+                    b.HasOne("SibCCSPETest.Data.Question", "Question")
                         .WithMany("Answers")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -320,26 +354,26 @@ namespace SibCCSPETest.WebApi.Migrations
                     b.Navigation("Question");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.Group", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.Group", b =>
                 {
-                    b.HasOne("SibCCSPETest.Specialization", "Specialization")
+                    b.HasOne("SibCCSPETest.Data.Specialization", "Specialization")
                         .WithMany("Groups")
                         .HasForeignKey("SpecializationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.Navigation("Specialization");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.GroupUser", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.GroupUser", b =>
                 {
-                    b.HasOne("SibCCSPETest.Group", "Group")
+                    b.HasOne("SibCCSPETest.Data.Group", "Group")
                         .WithMany("GroupUser")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SibCCSPETest.User", "User")
+                    b.HasOne("SibCCSPETest.Data.User", "User")
                         .WithMany("GroupUser")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -350,13 +384,13 @@ namespace SibCCSPETest.WebApi.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.Result", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.Result", b =>
                 {
-                    b.HasOne("SibCCSPETest.Answer", "Answer")
+                    b.HasOne("SibCCSPETest.Data.Answer", "Answer")
                         .WithMany()
                         .HasForeignKey("AnswerId");
 
-                    b.HasOne("SibCCSPETest.GroupUser", "GroupUser")
+                    b.HasOne("SibCCSPETest.Data.GroupUser", "GroupUser")
                         .WithMany("Results")
                         .HasForeignKey("GroupUserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -367,37 +401,37 @@ namespace SibCCSPETest.WebApi.Migrations
                     b.Navigation("GroupUser");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.Setting", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.Setting", b =>
                 {
-                    b.HasOne("SibCCSPETest.Group", "Group")
+                    b.HasOne("SibCCSPETest.Data.Group", "Group")
                         .WithOne("Setting")
-                        .HasForeignKey("SibCCSPETest.Setting", "GroupId")
+                        .HasForeignKey("SibCCSPETest.Data.Setting", "GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.Topic", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.Topic", b =>
                 {
-                    b.HasOne("SibCCSPETest.Specialization", "Specialization")
+                    b.HasOne("SibCCSPETest.Data.Specialization", "Specialization")
                         .WithMany("Topics")
                         .HasForeignKey("SpecializationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.Navigation("Specialization");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.TopicQuestion", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.TopicQuestion", b =>
                 {
-                    b.HasOne("SibCCSPETest.Question", "Question")
+                    b.HasOne("SibCCSPETest.Data.Question", "Question")
                         .WithMany("TopicQuestion")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SibCCSPETest.Topic", "Topic")
+                    b.HasOne("SibCCSPETest.Data.Topic", "Topic")
                         .WithMany("TopicQuestion")
                         .HasForeignKey("TopicId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -408,38 +442,38 @@ namespace SibCCSPETest.WebApi.Migrations
                     b.Navigation("Topic");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.Group", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.Group", b =>
                 {
                     b.Navigation("GroupUser");
 
                     b.Navigation("Setting");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.GroupUser", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.GroupUser", b =>
                 {
                     b.Navigation("Results");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.Question", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.Question", b =>
                 {
                     b.Navigation("Answers");
 
                     b.Navigation("TopicQuestion");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.Specialization", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.Specialization", b =>
                 {
                     b.Navigation("Groups");
 
                     b.Navigation("Topics");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.Topic", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.Topic", b =>
                 {
                     b.Navigation("TopicQuestion");
                 });
 
-            modelBuilder.Entity("SibCCSPETest.User", b =>
+            modelBuilder.Entity("SibCCSPETest.Data.User", b =>
                 {
                     b.Navigation("GroupUser");
                 });

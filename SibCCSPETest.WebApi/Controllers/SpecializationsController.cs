@@ -56,13 +56,13 @@ namespace SibCCSPETest.WebApi.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult<bool>> Delete(int id)
         {
-            var specialization = await _service.SpecializationRepository.GetSpecializationAsync(s => s.Id == id);
+            var specialization = await _service.SpecializationRepository.GetSpecializationAsync(s => s.Id == id, "Groups, Topics");
             if (specialization == null)
                 return NotFound(new { Message = $"Специализация с id {id} не найдена." });
-            _service.SpecializationRepository.DeleteSpecialization(specialization);
-            return NoContent();
+            var result = _service.SpecializationRepository.DeleteSpecialization(specialization);
+            return Ok(result);
         }
     }
 }

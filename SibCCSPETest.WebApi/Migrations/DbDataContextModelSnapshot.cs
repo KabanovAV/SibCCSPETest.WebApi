@@ -30,11 +30,11 @@ namespace SibCCSPETest.WebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("ChangedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("boolean");
@@ -62,23 +62,24 @@ namespace SibCCSPETest.WebApi.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Begin")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime?>("ChangedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("End")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("SpecializationId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.HasKey("Id");
 
@@ -95,20 +96,20 @@ namespace SibCCSPETest.WebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("ChangedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime?>("EndTest")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("EndTest")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("GroupId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("StartTest")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("StartTest")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
@@ -133,11 +134,11 @@ namespace SibCCSPETest.WebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("ChangedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -159,11 +160,11 @@ namespace SibCCSPETest.WebApi.Migrations
                     b.Property<int?>("AnswerId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("ChangedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("GroupUserId")
                         .HasColumnType("integer");
@@ -188,19 +189,19 @@ namespace SibCCSPETest.WebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("ChangedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("CountOfQuestion")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("GroupId")
                         .HasColumnType("integer");
 
-                    b.Property<TimeSpan?>("Timer")
+                    b.Property<TimeSpan>("Timer")
                         .HasColumnType("interval");
 
                     b.HasKey("Id");
@@ -219,15 +220,16 @@ namespace SibCCSPETest.WebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("ChangedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -242,18 +244,19 @@ namespace SibCCSPETest.WebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("ChangedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("SpecializationId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -270,11 +273,11 @@ namespace SibCCSPETest.WebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("ChangedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("QuestionId")
                         .HasColumnType("integer");
@@ -299,19 +302,21 @@ namespace SibCCSPETest.WebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("ChangedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
 
                     b.Property<string>("Login")
                         .IsRequired()
@@ -351,7 +356,7 @@ namespace SibCCSPETest.WebApi.Migrations
                     b.HasOne("SibCCSPETest.Data.Specialization", "Specialization")
                         .WithMany("Groups")
                         .HasForeignKey("SpecializationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.Navigation("Specialization");
@@ -409,7 +414,7 @@ namespace SibCCSPETest.WebApi.Migrations
                     b.HasOne("SibCCSPETest.Data.Specialization", "Specialization")
                         .WithMany("Topics")
                         .HasForeignKey("SpecializationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.Navigation("Specialization");
